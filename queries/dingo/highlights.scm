@@ -10,21 +10,11 @@
   "map"
   "chan"
   "for"
-  "range"
-  "switch"
-  "case"
-  "default"
-  "select"
-  "break"
-  "continue"
-  "goto"
-  "fallthrough"
-  "defer"
-  "go"
   "if"
   "else"
   "var"
   "const"
+  "range"
 ] @keyword
 
 ; Dingo-specific keywords
@@ -32,8 +22,6 @@
   "enum"
   "match"
   "let"
-  "guard"
-  "where"
 ] @keyword
 
 ; Operators
@@ -60,6 +48,10 @@
   "<<"
   ">>"
   "<-"
+  "+="
+  "-="
+  "*="
+  "/="
 ] @operator
 
 ; Dingo special operators
@@ -69,52 +61,50 @@
 (error_propagation "?" @operator)
 
 ; Lambda pipes (special highlighting)
-(rust_style_lambda "|" @punctuation.special)
+(lambda_expression "|" @punctuation.special)
 
 ; Types
-(type_spec name: (identifier) @type.definition)
-(type_parameter (identifier) @type.parameter)
+(type_declaration (identifier) @type.definition)
+(type_param (identifier) @type.parameter)
 (generic_type (identifier) @type)
+(qualified_type (identifier) @type)
 
 ; Dingo enum
 (enum_declaration name: (identifier) @type.definition)
 (enum_variant name: (identifier) @constructor)
+(variant_field (identifier) @property)
 
 ; Match patterns
 (match_expression "match" @keyword.control)
-(match_arm pattern: (variant_pattern name: (identifier) @constructor))
-(wildcard_pattern) @variable.builtin
+(variant_match (identifier) @constructor)
 
 ; Functions
 (function_declaration name: (identifier) @function)
-(call_expression function: (identifier) @function.call)
-(call_expression function: (selector_expression field: (identifier) @function.method.call))
+(call_expr (identifier) @function.call)
+(call_expr (selector_expr (identifier) @function.method.call))
 
 ; Parameters
-(parameter name: (identifier) @variable.parameter)
-(lambda_parameter name: (identifier) @variable.parameter)
+(param_decl (identifier) @variable.parameter)
+(lambda_param (identifier) @variable.parameter)
 
 ; Variables
-(let_declaration name: (identifier) @variable)
-(var_spec name: (identifier) @variable)
-(const_spec name: (identifier) @constant)
+(let_declaration (identifier) @variable)
+(var_spec (identifier) @variable)
+(const_spec (identifier) @constant)
 
 ; Literals
 (int_literal) @number
 (float_literal) @number.float
-(interpreted_string_literal) @string
-(raw_string_literal) @string
+(string_literal) @string
 (rune_literal) @character
-(escape_sequence) @string.escape
 
 ; Booleans and nil
-(true) @boolean
-(false) @boolean
-(nil) @constant.builtin
+"true" @boolean
+"false" @boolean
+"nil" @constant.builtin
 
 ; Comments
-(line_comment) @comment
-(block_comment) @comment
+(comment) @comment
 
 ; Punctuation
 [
@@ -134,10 +124,16 @@
 ] @punctuation.delimiter
 
 ; Import path
-(import_spec path: (interpreted_string_literal) @string.special)
+(import_spec (string_literal) @string.special)
 
 ; Package name
 (package_clause (identifier) @namespace)
 
+; Wildcard pattern
+"_" @variable.builtin
+
 ; Error propagation expression (special styling)
 (error_propagation) @punctuation.special
+
+; Safe navigation (special styling)
+(safe_navigation) @punctuation.special
