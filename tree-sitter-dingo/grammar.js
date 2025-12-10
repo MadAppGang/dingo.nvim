@@ -52,7 +52,6 @@ module.exports = grammar({
       $.type_declaration,
       $.const_declaration,
       $.var_declaration,
-      $.let_declaration,        // Dingo
       $.enum_declaration,       // Dingo
     ),
 
@@ -81,24 +80,6 @@ module.exports = grammar({
       optional(choice($.identifier, '.')),
       $.string_literal,
     ),
-
-    // =============================================
-    // DINGO: LET BINDING
-    // =============================================
-    let_declaration: $ => seq(
-      'let',
-      $._pattern,
-      optional(seq(':', $._type_expr)),
-      '=',
-      $._expr,
-    ),
-
-    _pattern: $ => choice(
-      $.identifier,
-      $.tuple_pattern,
-    ),
-
-    tuple_pattern: $ => seq('(', commaSep1($.identifier), ')'),
 
     // =============================================
     // DINGO: ENUM

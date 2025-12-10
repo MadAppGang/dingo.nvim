@@ -21,7 +21,6 @@
 [
   "enum"
   "match"
-  "let"
 ] @keyword
 
 ; Operators
@@ -117,9 +116,6 @@
   (identifier) @variable.parameter)
 
 ; Variables
-(let_declaration
-  (identifier) @variable)
-
 (var_spec
   (identifier) @variable)
 

@@ -1744,129 +1744,6 @@
     }
   },
   {
-    "type": "let_declaration",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "array_type",
-          "named": true
-        },
-        {
-          "type": "binary_expr",
-          "named": true
-        },
-        {
-          "type": "call_expr",
-          "named": true
-        },
-        {
-          "type": "chan_type",
-          "named": true
-        },
-        {
-          "type": "composite_literal",
-          "named": true
-        },
-        {
-          "type": "error_propagation",
-          "named": true
-        },
-        {
-          "type": "float_literal",
-          "named": true
-        },
-        {
-          "type": "func_literal",
-          "named": true
-        },
-        {
-          "type": "func_type",
-          "named": true
-        },
-        {
-          "type": "generic_type",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "index_expr",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "interface_type",
-          "named": true
-        },
-        {
-          "type": "lambda_expression",
-          "named": true
-        },
-        {
-          "type": "map_type",
-          "named": true
-        },
-        {
-          "type": "match_expression",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expr",
-          "named": true
-        },
-        {
-          "type": "pointer_type",
-          "named": true
-        },
-        {
-          "type": "qualified_type",
-          "named": true
-        },
-        {
-          "type": "rune_literal",
-          "named": true
-        },
-        {
-          "type": "safe_navigation",
-          "named": true
-        },
-        {
-          "type": "selector_expr",
-          "named": true
-        },
-        {
-          "type": "slice_type",
-          "named": true
-        },
-        {
-          "type": "string_literal",
-          "named": true
-        },
-        {
-          "type": "struct_type",
-          "named": true
-        },
-        {
-          "type": "tuple_pattern",
-          "named": true
-        },
-        {
-          "type": "unary_expr",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "map_type",
     "named": true,
     "fields": {},
@@ -2744,10 +2621,6 @@
           "named": true
         },
         {
-          "type": "let_declaration",
-          "named": true
-        },
-        {
           "type": "package_clause",
           "named": true
         },
@@ -2777,21 +2650,6 @@
       "types": [
         {
           "type": "field_decl",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "tuple_pattern",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
           "named": true
         }
       ]
@@ -3478,10 +3336,6 @@
   },
   {
     "type": "interface",
-    "named": false
-  },
-  {
-    "type": "let",
     "named": false
   },
   {
