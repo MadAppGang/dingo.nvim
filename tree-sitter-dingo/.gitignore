@@ -1,0 +1,9 @@
+# Build artifacts
+build/
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Keep src/ and parser.so for distribution
+# These are generated but needed for nvim-treesitter

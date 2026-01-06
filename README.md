@@ -1,6 +1,6 @@
 # dingo.nvim
 
-Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo.nvim) programming language - a meta-language for Go with enhanced type safety and modern syntax.
+Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo) programming language - a meta-language for Go with enhanced type safety and modern syntax.
 
 ## Features
 
@@ -20,13 +20,16 @@ Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo.nvim) programm
 
 ```lua
 {
-  "MadAppGang/dingo.nvim.nvim",
+  "MadAppGang/dingo",
+  subdir = "editors/nvim",  -- Required: plugin is in subdirectory
   ft = "dingo",
   config = function()
     require("dingo").setup()
   end,
 }
 ```
+
+> **Note**: The `subdir` option is required because the Neovim plugin lives in `editors/nvim/` within the main Dingo repository.
 
 #### With Mason for Automatic Tool Installation
 
@@ -46,7 +49,8 @@ Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo.nvim) programm
 
 -- Then the Dingo plugin
 {
-  "MadAppGang/dingo.nvim",
+  "MadAppGang/dingo",
+  subdir = "editors/nvim",
   ft = "dingo",
   dependencies = {
     "williamboman/mason.nvim",
@@ -79,7 +83,8 @@ return {
 
   -- Dingo language support
   {
-    "MadAppGang/dingo.nvim",
+    "MadAppGang/dingo",
+    subdir = "editors/nvim",
     ft = "dingo",
     dependencies = {
       "williamboman/mason.nvim",
@@ -121,6 +126,28 @@ return {
 }
 ```
 
+#### Using Bundled Lazy Spec
+
+The plugin includes a ready-to-use lazy.nvim spec with full configuration:
+
+```lua
+-- In your lazy.nvim setup (init.lua or lua/config/lazy.lua)
+require("lazy").setup({
+  {
+    "MadAppGang/dingo",
+    subdir = "editors/nvim",
+    import = "dingo.lazy",  -- Import full spec with keybindings and Mason
+  },
+  -- your other plugins...
+})
+```
+
+This automatically sets up:
+- Dingo plugin with sensible defaults
+- Keybindings (`<leader>db`, `<leader>dr`, `<leader>df`, `<leader>dl`, `<leader>dt`)
+- Mason integration for gopls
+- Tree-sitter configuration
+
 #### LazyVim Distribution
 
 If you're using [LazyVim](https://www.lazyvim.org/), add this to your plugins:
@@ -129,7 +156,8 @@ If you're using [LazyVim](https://www.lazyvim.org/), add this to your plugins:
 -- lua/plugins/dingo.lua
 return {
   {
-    "MadAppGang/dingo.nvim",
+    "MadAppGang/dingo",
+    subdir = "editors/nvim",
     ft = "dingo",
     opts = {
       lsp = { enabled = true },
@@ -158,7 +186,8 @@ return {
 
 ```lua
 use {
-  "MadAppGang/dingo.nvim",
+  "MadAppGang/dingo",
+  rtp = "editors/nvim",  -- Required: plugin is in subdirectory
   ft = "dingo",
   requires = {
     "williamboman/mason.nvim",
@@ -172,10 +201,12 @@ use {
 
 ### Using vim-plug
 
+vim-plug doesn't support subdirectory plugins well. Use the `rtp` option:
+
 ```vim
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'MadAppGang/dingo.nvim', { 'for': 'dingo' }
+Plug 'MadAppGang/dingo', { 'for': 'dingo', 'rtp': 'editors/nvim' }
 
 lua << EOF
 require("mason").setup()
@@ -186,6 +217,8 @@ require("dingo").setup()
 EOF
 ```
 
+> **Note**: If `rtp` doesn't work, consider using lazy.nvim which has better subdirectory support.
+
 ### Local Development Installation
 
 For contributing or testing local changes:
@@ -193,7 +226,7 @@ For contributing or testing local changes:
 ```lua
 -- lazy.nvim with local path
 {
-  dir = "~/projects/dingo.nvim",  -- Your local path
+  dir = "~/projects/dingo/editors/nvim",  -- Your local path
   ft = "dingo",
   config = function()
     require("dingo").setup()
@@ -221,10 +254,10 @@ Currently, `dingo` and `dingo-lsp` need to be installed manually via Go:
 
 ```bash
 # Install dingo CLI
-go install github.com/MadAppGang/dingo.nvim/cmd/dingo@latest
+go install github.com/MadAppGang/dingo/cmd/dingo@latest
 
 # Install dingo-lsp (Language Server)
-go install github.com/MadAppGang/dingo.nvim/cmd/dingo-lsp@latest
+go install github.com/MadAppGang/dingo/cmd/dingo-lsp@latest
 ```
 
 > **Note**: Mason registry support for `dingo` and `dingo-lsp` is planned. Once available, you'll be able to install them with `:MasonInstall dingo dingo-lsp`.
@@ -253,8 +286,8 @@ require("dingo").setup({
 
 | Tool | Purpose | Installation |
 |------|---------|--------------|
-| `dingo` | CLI for building/formatting/linting | `go install github.com/MadAppGang/dingo.nvim/cmd/dingo@latest` |
-| `dingo-lsp` | Language Server | `go install github.com/MadAppGang/dingo.nvim/cmd/dingo-lsp@latest` |
+| `dingo` | CLI for building/formatting/linting | `go install github.com/MadAppGang/dingo/cmd/dingo@latest` |
+| `dingo-lsp` | Language Server | `go install github.com/MadAppGang/dingo/cmd/dingo-lsp@latest` |
 | `gopls` | Go Language Server (used internally) | `go install golang.org/x/tools/gopls@latest` or `:MasonInstall gopls` |
 
 ### Environment Setup
@@ -418,7 +451,7 @@ require("nvim-treesitter.configs").setup({
 For local development:
 
 ```bash
-cd /path/to/dingo.nvim/tree-sitter-dingo
+cd /path/to/dingo/editors/nvim/tree-sitter-dingo
 npm install
 npm run build
 ```
@@ -516,7 +549,7 @@ This will verify:
 
 2. Verify tree-sitter is loaded:
    ```vim
-   :lua =vim.treesitter.language.require_language("dingo", true)
+   :lua =vim.treesitter.language.add("dingo", true)
    ```
 
 3. Inspect parsed tree:
@@ -575,14 +608,14 @@ MIT License - see [LICENSE](../../LICENSE) for details.
 
 ## Related Projects
 
-- [Dingo](https://github.com/MadAppGang/dingo.nvim) - The Dingo language transpiler
-- [dingo-lsp](https://github.com/MadAppGang/dingo.nvim/tree/main/cmd/dingo-lsp) - Language Server Protocol implementation
+- [Dingo](https://github.com/MadAppGang/dingo) - The Dingo language transpiler
+- [dingo-lsp](https://github.com/MadAppGang/dingo/tree/main/cmd/dingo-lsp) - Language Server Protocol implementation
 - [mason.nvim](https://github.com/williamboman/mason.nvim) - Package manager for Neovim
 - [tree-sitter](https://tree-sitter.github.io/tree-sitter/) - Parser generator and incremental parsing library
 
 ## Resources
 
-- [Dingo Documentation](https://github.com/MadAppGang/dingo.nvim#readme)
+- [Dingo Documentation](https://github.com/MadAppGang/dingo#readme)
 - [LSP Specification](https://microsoft.github.io/language-server-protocol/)
 - [Neovim LSP Guide](https://neovim.io/doc/user/lsp.html)
 - [Tree-sitter Documentation](https://tree-sitter.github.io/tree-sitter/creating-parsers)

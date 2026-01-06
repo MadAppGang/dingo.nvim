@@ -1,16 +1,17 @@
 -- lazy.nvim plugin spec for dingo.nvim
--- This file can be used directly as a lazy.nvim plugin spec
+-- This file provides the complete plugin specification for lazy.nvim
 --
 -- Usage in your lazy.nvim config:
 --   require("lazy").setup({
---     { import = "dingo.lazy" },
+--     { "MadAppGang/dingo.nvim", import = "dingo.lazy" },
 --     -- your other plugins...
 --   })
 
 return {
-  -- Dingo language support
+  -- Main Dingo plugin configuration
   {
     "MadAppGang/dingo.nvim",
+    name = "dingo.nvim",
     ft = "dingo",
     dependencies = {
       -- Optional but recommended dependencies
@@ -67,8 +68,6 @@ return {
     optional = true,
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
-      -- Dingo parser will be available after it's published to nvim-treesitter
-      -- For now, use local installation via TSInstallFromGrammar
       if type(opts.ensure_installed) == "table" then
         vim.list_extend(opts.ensure_installed, { "go" })
       end

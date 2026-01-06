@@ -51,7 +51,7 @@ Ensure $GOPATH/bin is in your $PATH.
 Using lazy.nvim (recommended):~                         *dingo-install-lazy*
 >
     {
-      "MadAppGang/dingo.nvim",
+      "MadAppGang/dingo",
       ft = "dingo",
       config = function()
         require("dingo").setup()
@@ -68,7 +68,7 @@ Using lazy.nvim with Mason:~                       *dingo-install-lazy-mason*
     },
     -- Dingo plugin
     {
-      "MadAppGang/dingo.nvim",
+      "MadAppGang/dingo",
       ft = "dingo",
       dependencies = { "williamboman/mason.nvim" },
       config = function()
@@ -89,7 +89,7 @@ Import the bundled lazy.nvim spec for full configuration:
 Using packer.nvim:~
 >
     use {
-      "MadAppGang/dingo.nvim",
+      "MadAppGang/dingo",
       ft = "dingo",
       config = function()
         require("dingo").setup()
@@ -98,7 +98,7 @@ Using packer.nvim:~
 <
 Using vim-plug:~
 >
-    Plug 'MadAppGang/dingo.nvim', { 'for': 'dingo' }
+    Plug 'MadAppGang/dingo', { 'for': 'dingo' }
 
     lua << EOF
     require("dingo").setup()
@@ -106,7 +106,7 @@ Using vim-plug:~
 <
 Manual installation:~
 >
-    git clone https://github.com/MadAppGang/dingo.nvim \
+    git clone https://github.com/MadAppGang/dingo \
       ~/.config/nvim/pack/plugins/start/dingo
 <
 
@@ -504,7 +504,7 @@ Tree-sitter highlighting not working:~
 <
 2. Verify tree-sitter is loaded:
 >
-    :lua =vim.treesitter.language.require_language("dingo", true)
+    :lua =vim.treesitter.language.add("dingo", true)
 <
 3. Inspect parsed tree:
 >
@@ -516,7 +516,7 @@ Tree-sitter highlighting not working:~
 
 dingo.nvim is developed as part of the Dingo language project.
 
-Repository:         https://github.com/MadAppGang/dingo.nvim
+Repository:         https://github.com/MadAppGang/dingo
 Dingo Documentation: https://github.com/MadAppGang/dingo#readme
 License:            MIT
 
