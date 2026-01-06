@@ -17,6 +17,9 @@ function M.setup(opts)
       vim.log.levels.INFO
     )
   end
+
+  -- Register formatter with conform.nvim (if installed)
+  require("dingo.conform").setup()
 end
 
 return M

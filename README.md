@@ -20,8 +20,7 @@ Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo) programming l
 
 ```lua
 {
-  "MadAppGang/dingo",
-  subdir = "editors/nvim",  -- Required: plugin is in subdirectory
+  "MadAppGang/dingo.nvim",
   ft = "dingo",
   config = function()
     require("dingo").setup()
@@ -29,124 +28,37 @@ Neovim plugin for the [Dingo](https://github.com/MadAppGang/dingo) programming l
 }
 ```
 
-> **Note**: The `subdir` option is required because the Neovim plugin lives in `editors/nvim/` within the main Dingo repository.
-
-#### With Mason for Automatic Tool Installation
+#### Full-Featured Setup
 
 ```lua
--- Install Mason and mason-lspconfig first
 {
-  "williamboman/mason.nvim",
-  opts = {},
-},
-
-{
-  "williamboman/mason-lspconfig.nvim",
-  opts = {
-    ensure_installed = { "gopls" },  -- gopls is required by dingo-lsp
-  },
-},
-
--- Then the Dingo plugin
-{
-  "MadAppGang/dingo",
-  subdir = "editors/nvim",
+  "MadAppGang/dingo.nvim",
   ft = "dingo",
-  dependencies = {
-    "williamboman/mason.nvim",
-  },
   config = function()
-    require("dingo").setup()
+    require("dingo").setup({
+      lsp = {
+        enabled = true,
+        log_level = "info",
+      },
+      format = {
+        enabled = true,
+        on_save = true,
+      },
+      lint = {
+        enabled = true,
+        on_save = true,
+      },
+    })
   end,
-}
-```
-
-#### Full-Featured Setup with lazy.nvim
-
-```lua
-return {
-  -- Mason for tool management
-  {
-    "williamboman/mason.nvim",
-    lazy = false,
-    config = true,
-  },
-
-  {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = { "gopls" },
-      automatic_installation = true,
-    },
-  },
-
-  -- Dingo language support
-  {
-    "MadAppGang/dingo",
-    subdir = "editors/nvim",
-    ft = "dingo",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "nvim-treesitter/nvim-treesitter",  -- Optional: for tree-sitter support
-    },
-    config = function()
-      require("dingo").setup({
-        lsp = {
-          enabled = true,
-          log_level = "info",
-        },
-        format = {
-          enabled = true,
-          on_save = true,
-        },
-        lint = {
-          enabled = true,
-          on_save = true,
-        },
-      })
-    end,
-    keys = {
-      { "<leader>db", "<cmd>DingoBuild<cr>", desc = "Dingo Build" },
-      { "<leader>dr", "<cmd>DingoRun<cr>", desc = "Dingo Run" },
-      { "<leader>df", "<cmd>DingoFormat<cr>", desc = "Dingo Format" },
-      { "<leader>dl", "<cmd>DingoLint<cr>", desc = "Dingo Lint" },
-      { "<leader>dt", "<cmd>DingoTranspile<cr>", desc = "Dingo Transpile" },
-    },
-  },
-
-  -- Optional: nvim-treesitter configuration
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { "go", "dingo" })
-    end,
+  keys = {
+    { "<leader>db", "<cmd>DingoBuild<cr>", desc = "Dingo Build" },
+    { "<leader>dr", "<cmd>DingoRun<cr>", desc = "Dingo Run" },
+    { "<leader>df", "<cmd>DingoFormat<cr>", desc = "Dingo Format" },
+    { "<leader>dl", "<cmd>DingoLint<cr>", desc = "Dingo Lint" },
+    { "<leader>dt", "<cmd>DingoTranspile<cr>", desc = "Dingo Transpile" },
   },
 }
 ```
-
-#### Using Bundled Lazy Spec
-
-The plugin includes a ready-to-use lazy.nvim spec with full configuration:
-
-```lua
--- In your lazy.nvim setup (init.lua or lua/config/lazy.lua)
-require("lazy").setup({
-  {
-    "MadAppGang/dingo",
-    subdir = "editors/nvim",
-    import = "dingo.lazy",  -- Import full spec with keybindings and Mason
-  },
-  -- your other plugins...
-})
-```
-
-This automatically sets up:
-- Dingo plugin with sensible defaults
-- Keybindings (`<leader>db`, `<leader>dr`, `<leader>df`, `<leader>dl`, `<leader>dt`)
-- Mason integration for gopls
-- Tree-sitter configuration
 
 #### LazyVim Distribution
 
@@ -156,8 +68,7 @@ If you're using [LazyVim](https://www.lazyvim.org/), add this to your plugins:
 -- lua/plugins/dingo.lua
 return {
   {
-    "MadAppGang/dingo",
-    subdir = "editors/nvim",
+    "MadAppGang/dingo.nvim",
     ft = "dingo",
     opts = {
       lsp = { enabled = true },
@@ -186,8 +97,7 @@ return {
 
 ```lua
 use {
-  "MadAppGang/dingo",
-  rtp = "editors/nvim",  -- Required: plugin is in subdirectory
+  "MadAppGang/dingo.nvim",
   ft = "dingo",
   requires = {
     "williamboman/mason.nvim",
@@ -201,12 +111,10 @@ use {
 
 ### Using vim-plug
 
-vim-plug doesn't support subdirectory plugins well. Use the `rtp` option:
-
 ```vim
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'MadAppGang/dingo', { 'for': 'dingo', 'rtp': 'editors/nvim' }
+Plug 'MadAppGang/dingo.nvim', { 'for': 'dingo' }
 
 lua << EOF
 require("mason").setup()
@@ -217,8 +125,6 @@ require("dingo").setup()
 EOF
 ```
 
-> **Note**: If `rtp` doesn't work, consider using lazy.nvim which has better subdirectory support.
-
 ### Local Development Installation
 
 For contributing or testing local changes:
@@ -226,13 +132,60 @@ For contributing or testing local changes:
 ```lua
 -- lazy.nvim with local path
 {
-  dir = "~/projects/dingo/editors/nvim",  -- Your local path
+  dir = "~/projects/dingo.nvim",  -- Your local path
   ft = "dingo",
   config = function()
     require("dingo").setup()
   end,
 }
 ```
+
+## conform.nvim Integration
+
+The plugin **automatically registers** a `dingo_fmt` formatter with [conform.nvim](https://github.com/stevearc/conform.nvim) if it's installed. No manual configuration needed!
+
+### How It Works
+
+When you call `require("dingo").setup()`, the plugin:
+1. Detects if conform.nvim is installed
+2. Registers `dingo_fmt` formatter (uses `dingo fmt` via stdin)
+3. Maps the `dingo` filetype to use `dingo_fmt`
+
+### Manual Configuration (Optional)
+
+If you prefer explicit control or automatic registration doesn't work, add this to your conform config:
+
+```lua
+-- lua/configs/conform.lua
+return {
+  formatters_by_ft = {
+    dingo = { "dingo_fmt" },
+    -- your other formatters...
+  },
+
+  formatters = {
+    dingo_fmt = {
+      command = "dingo",
+      args = { "fmt" },
+      stdin = true,
+    },
+  },
+}
+```
+
+### Troubleshooting Format Issues
+
+If you see "Formatter 'gofumpt' timeout" when formatting `.dingo` files:
+
+1. **Cause**: conform.nvim's `lsp_fallback = true` triggers gopls formatting
+2. **Solution**: Ensure dingo.nvim is loaded before you open `.dingo` files so the formatter registers
+
+Check if the formatter is registered:
+```vim
+:ConformInfo
+```
+
+You should see `dingo_fmt` listed for the `dingo` filetype.
 
 ## Mason Integration
 
